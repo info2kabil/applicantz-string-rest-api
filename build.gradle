@@ -2,10 +2,11 @@ plugins {
 	id 'org.springframework.boot' version '2.3.2.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'com.beta'
-version = '0.0.1-SNAPSHOT'
+version = '2.0-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 repositories {
@@ -13,12 +14,30 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+	implementation 'org.springframework.boot:spring-boot-starter-web:2.5.3'
+	testImplementation('org.springframework.boot:spring-boot-starter-test:2.5.3') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+	// Dependency for Swagger docs generation
+	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	// Lombok dependency for POJO generation
+	compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
 }
 
 test {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jacocoTestReport {
+	dependsOn test // tests are required to run before generating the report
+
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+					"**/RestServiceApplication.*",
+					"**/SpringFoxConfig.*"
+			])
+		}))
+	}
 }

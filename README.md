@@ -1,88 +1,75 @@
-# Your Task
-Our company has released a beta version of **String Reply Service** and it has been a huge success.
-In the current implementation, the **String Reply Service** takes in an input string (in the format of `[a-z0-9]*`)
-and returns the input in a JSON object.
+# Rest Service For String Operation
 
-For example,
+### To verify the build
 
+To build the project, execute the below command from root folder
 ```
-GET /reply/kbzw9ru
-{
-    "data": "kbzw9ru"
-}
+./gradlew build
+```
+It will produce the Jar and Code Coverage report in /build folder
+```
+Code Coverage Report -> /build/reports/jacoco/test/html/index.html
+Test Results Report  -> /build/test-results/test
 ```
 
-As the service is widely adopted, there have been increasing feature requests.
-Our project manager has come back with the following requirement:
+### Start project as SpringBoot using Gradle Wrapper
 
-The input string will now be comprised of two components, a rule and a string, separated by a dash (-).
-Rules always contain two numbers. Each number represents a string operation.
+To start the project as SpringBoot application using gradle wrapper, simply run the below command
+```
+./gradlew bootRun
+```
+Now you can see the application status in the logs and able to test the actual endpoints
+Added the swagger-ui for the API documentation
 
-The supported numbers are:
+* Application URL - http://localhost:8080
+* Swagger URL     - http://localhost:8080/swagger-ui/
 
-- `1`: reverse the string
 
-   E.g. `kbzw9ru` becomes `ur9wzbk`
-
-- `2`: encode the string via MD5 hash algorithm
-
-   E.g. `kbzw9ru` becomes `0fafeaae780954464c1b29f765861fad`
-
-The numbers are applied in sequence, i.e. the output of the first rule will
-serve as the input of the second rule. The numbers can also be repeated,
-i.e. a rule of 11 would mean reversing the string twice, resulting in no change to the string.
+Once the service started, the endpoint will be available at `localhost:8080` & swagger-ui available at `http://localhost:8080/swagger-ui/`, so you can make request to the service endpoint
 
 Giving a few examples,
 
-```
-GET /v2/reply/11-kbzw9ru
+```json
+GET http://localhost:8080/v2/reply/11-kbzw9ru
+
 {
     "data": "kbzw9ru"
 }
 ```
-```
-GET /v2/reply/12-kbzw9ru
+```json
+GET http://localhost:8080/v2/reply/12-kbzw9ru
+
 {
     "data": "5a8973b3b1fafaeaadf10e195c6e1dd4"
 }
 ```
+You can still use the existing endpoint
+
+### Run the Application as Jar
+Execute the below command from root folder
 ```
-GET /v2/reply/22-kbzw9ru
-{
-    "data": "e8501e64cf0a9fa45e3c25aa9e77ffd5"
-}
+gradle clean build
 ```
-
-## What you need to do
-Use the boilerplate given and implement the above requirement.
-Your implementation should consider future requirements, i.e. be able to easily add new rules.
-
-Upon completing the task, please feel free to (though not required):
-
-- host your code on Github
-- include any readme to explain your setup/environment
-- add/implement anything you think would be beneficial
-
-## Build project
-
-To build the project, simply run
+It will produce the Jar and Code Coverage report in /build folder
 ```
-./gradlew build
+Jar Path -> /build/libs/rest-service-2.0-SNAPSHOT.jar
+```
+Execute the jar using below command, replace the password while executing
+```
+java -jar /build/libs/rest-service-2.0-SNAPSHOT.jar
 ```
 
-## Start project
+### For Adding New Rules
+* Introduce the new RuleType in the RuleType ENUM
+* Add the Implementation for the New RuleType and implements the IRule interface
+* Implementation class should return the ruleType as the new ruleType added in the RuleTypeEnum
+* You are good to go now
 
-To start the project, simply run
-```
-./gradlew bootRun
-```
+### Technologies
 
-Once the service started, the endpoint will be available at `localhost:8080`, so you can make request to the service endpoint
-
-```json
-GET localhost:8080/reply/helloworld
-
-{
-    message: "helloword"
-}
-```
+* Java 8
+* Spring Boot 2.5.3
+* Lombok
+* Swagger
+* Mockito
+* Jacoco

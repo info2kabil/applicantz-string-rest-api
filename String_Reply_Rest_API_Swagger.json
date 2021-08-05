@@ -1,0 +1,171 @@
+{
+   "swagger":"2.0",
+   "info":{
+      "description":"\"REST API for String Reply Service with Custom Rule Enabled\"",
+      "version":"2.0.0",
+      "title":"String Reply Service REST API "
+   },
+   "host":"localhost:8080",
+   "basePath":"/",
+   "tags":[
+      {
+         "name":"reply-controller",
+         "description":"Reply Controller"
+      },
+      {
+         "name":"reply-controller-v-2",
+         "description":"Reply Controller V 2"
+      }
+   ],
+   "paths":{
+      "/reply":{
+         "get":{
+            "tags":[
+               "reply-controller"
+            ],
+            "summary":"To test the application endpoint",
+            "description":"Provides test data",
+            "operationId":"replyingUsingGET_2",
+            "produces":[
+               "*/*"
+            ],
+            "responses":{
+               "200":{
+                  "description":"Test endpoint to check the default response ",
+                  "schema":{
+                     "$ref":"#/definitions/ReplyMessage"
+                  }
+               },
+               "403":{
+                  "description":"Forbidden"
+               },
+               "404":{
+                  "description":"Not Found"
+               },
+               "500":{
+                  "description":"Internal server error due to application failure"
+               }
+            }
+         }
+      },
+      "/reply/{message}":{
+         "get":{
+            "tags":[
+               "reply-controller"
+            ],
+            "summary":"To get the reversed string",
+            "description":"Provides reversed given input string",
+            "operationId":"replyingUsingGET_3",
+            "produces":[
+               "*/*"
+            ],
+            "parameters":[
+               {
+                  "name":"message",
+                  "in":"path",
+                  "description":"message",
+                  "required":true,
+                  "type":"string"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"Successful reversed the given string",
+                  "schema":{
+                     "$ref":"#/definitions/ReplyMessage"
+                  }
+               },
+               "403":{
+                  "description":"Forbidden"
+               },
+               "404":{
+                  "description":"Not Found"
+               },
+               "500":{
+                  "description":"Internal server error due to application failure"
+               }
+            }
+         }
+      },
+      "/v2/reply":{
+         "get":{
+            "tags":[
+               "reply-controller-v-2"
+            ],
+            "summary":"To test the application endpoint",
+            "description":"Provides test data",
+            "operationId":"replyingUsingGET",
+            "produces":[
+               "*/*"
+            ],
+            "responses":{
+               "200":{
+                  "description":"Test endpoint to check the default response ",
+                  "schema":{
+                     "$ref":"#/definitions/ReplyMessage"
+                  }
+               },
+               "403":{
+                  "description":"Forbidden"
+               },
+               "404":{
+                  "description":"Not Found"
+               },
+               "500":{
+                  "description":"Internal server error due to application failure"
+               }
+            }
+         }
+      },
+      "/v2/reply/{message}":{
+         "get":{
+            "tags":[
+               "reply-controller-v-2"
+            ],
+            "summary":"To get the reply string with rules applied based on the input",
+            "description":"The input string will now be comprised of two components, a rule and a string, separated by a dash (-). \n Rules always contain two numbers. Each number represents a string operation.\n\n The supported numbers are:\n 1: reverse the string (E.g. kbzw9ru becomes ur9wzbk)\n 2: encode the string via MD5 hash algorithm (E.g. kbzw9ru becomes 0fafeaae780954464c1b29f765861fad)\n\n The numbers can be applied in sequence, i.e. the output of the first rule will serve as the input of the second rule.  The numbers can also be repeated, i.e. a rule of 11 would mean reversing the string twice, resulting in no change to the string. (Ex: 11-kbzw9ru)",
+            "operationId":"replyingUsingGET_1",
+            "produces":[
+               "*/*"
+            ],
+            "parameters":[
+               {
+                  "name":"message",
+                  "in":"path",
+                  "description":"message",
+                  "required":true,
+                  "type":"string"
+               }
+            ],
+            "responses":{
+               "200":{
+                  "description":"Successful conversion of the given string",
+                  "schema":{
+                     "$ref":"#/definitions/ReplyMessage"
+                  }
+               },
+               "403":{
+                  "description":"Forbidden"
+               },
+               "404":{
+                  "description":"Not Found"
+               },
+               "500":{
+                  "description":"Internal server error due to application failure"
+               }
+            }
+         }
+      }
+   },
+   "definitions":{
+      "ReplyMessage":{
+         "type":"object",
+         "properties":{
+            "data":{
+               "type":"string"
+            }
+         },
+         "title":"ReplyMessage"
+      }
+   }
+}
